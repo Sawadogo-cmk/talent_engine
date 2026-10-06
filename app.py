@@ -53,6 +53,30 @@ def init_db():
     conn.close()
 
 
+def seed_si_vide():
+    """
+    Insère des données de démonstration si la base est vide.
+    Utile notamment sur Streamlit Cloud, où la base est recréée
+    à chaque redéploiement.
+    """
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM candidats")
+        count = c.fetchone()[0]
+        conn.close()
+
+        if count == 0:
+            from seed_data import seed as seed_candidats
+            from seed_evaluations import seed as seed_evals
+            seed_candidats()
+            seed_evals()
+            print("✅ Données de démonstration insérées automatiquement.")
+    except Exception as e:
+        # On ne bloque pas l'app si le seed échoue
+        print(f"⚠️ Seed automatique ignoré : {e}")
+
+
 def ajouter_candidat(nom, email, telephone, pays, github, portfolio,
                      motivation, competences, experience, disponibilite):
     conn = sqlite3.connect(DB_NAME)
@@ -139,7 +163,7 @@ def get_classement():
 
 
 # ============================================================
-# GESTION DES CANDIDATS (suppression / réinitialisation)
+# GESTION DES CANDIDATS
 # ============================================================
 def supprimer_candidat(candidat_id):
     """Supprime un candidat et son évaluation associée."""
@@ -177,6 +201,7 @@ st.set_page_config(page_title="Talent Engine - SKULLVI", layout="wide")
 st.title("Talent Engine - SKULLVI")
 
 init_db()
+seed_si_vide()
 
 menu = [
     "Accueil",
@@ -202,6 +227,8 @@ if choix == "Accueil":
     - Attribuer un score
     - Classer les candidats
     - Identifier les profils à examiner en priorité
+
+    👉 Utilisez le menu à gauche pour naviguer.
     """)
 
 
