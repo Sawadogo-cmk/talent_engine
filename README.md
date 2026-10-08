@@ -109,7 +109,7 @@ Un **Talent Engine** en Python, avec une interface Streamlit, qui suit cinq éta
 - Vue dédiée aux profils à examiner en premier
 
 ### 📄 Rapport PDF
-- Export du rapport d'évaluation d'un candidat
+- Export du rapport 
 
 ### 🗑️ Gestion des candidats
 - Suppression individuelle (avec confirmation)
