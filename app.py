@@ -2,6 +2,8 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
+import tempfile
+from pathlib import Path
 from datetime import datetime
 
 from scoring import calculer_score_total, determiner_priorite
@@ -428,6 +430,7 @@ elif choix == "Classement & Priorités":
         else:
             df_evalues = df_evalues.sort_values('score_total', ascending=False)
 
+            # ---------- Classement complet ----------
             st.subheader("Classement complet")
             st.dataframe(
                 df_evalues[[
@@ -437,6 +440,49 @@ elif choix == "Classement & Priorités":
                 use_container_width=True
             )
 
+            # ---------- Téléchargement du rapport ----------
+            st.markdown("### 📥 Télécharger le rapport")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                # utf-8-sig ajoute un BOM pour qu'Excel reconnaisse l'UTF-8
+                csv = df_evalues.to_csv(index=False).encode("utf-8-sig")
+                st.download_button(
+                    label="📊 Télécharger en CSV",
+                    data=csv,
+                    file_name=f"classement_skullvi_{datetime.now().strftime('%Y%m%d')}.csv",
+                    mime="text/csv",
+                    use_container_width=True,
+                )
+
+            with col2:
+                try:
+                    from pdf_export import generer_pdf_classement
+
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=".pdf"
+                    ) as tmp:
+                        chemin_pdf = tmp.name
+
+                    generer_pdf_classement(df_evalues, chemin=chemin_pdf)
+
+                    with open(chemin_pdf, "rb") as f:
+                        pdf_bytes = f.read()
+
+                    Path(chemin_pdf).unlink(missing_ok=True)
+
+                    st.download_button(
+                        label="📄 Télécharger en PDF",
+                        data=pdf_bytes,
+                        file_name=f"classement_skullvi_{datetime.now().strftime('%Y%m%d')}.pdf",
+                        mime="application/pdf",
+                        use_container_width=True,
+                    )
+                except Exception as e:
+                    st.error(f"Erreur de génération PDF : {e}")
+
+            # ---------- Profils prioritaires ----------
             st.subheader("Profils à examiner en priorité")
             priorite_haute = df_evalues[df_evalues['priorite'] == 'Haute']
             if not priorite_haute.empty:
