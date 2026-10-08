@@ -12,15 +12,16 @@
 2. [Problème traité](#-problème-traité)
 3. [Solution](#-solution)
 4. [Fonctionnalités](#-fonctionnalités)
-5. [Architecture](#-architecture)
-6. [Choix techniques](#-choix-techniques)
-7. [Installation et lancement](#-installation-et-lancement)
-8. [Données de démonstration](#-données-de-démonstration)
-9. [Tests](#-tests)
-10. [Limites connues](#-limites-connues)
-11. [Pistes d'évolution](#-pistes-dévolution)
-12. [Usage de l'IA](#-usage-de-lia)
-13. [Auteur](#-auteur)
+5. [Aperçu](#-aperçu)
+6. [Architecture](#-architecture)
+7. [Choix techniques](#-choix-techniques)
+8. [Installation et lancement](#-installation-et-lancement)
+9. [Données de démonstration](#-données-de-démonstration)
+10. [Tests](#-tests)
+11. [Limites connues](#-limites-connues)
+12. [Pistes d'évolution](#-pistes-dévolution)
+13. [Usage de l'IA](#-usage-de-lia)
+14. [Auteur](#-auteur)
 
 ---
 
@@ -107,10 +108,41 @@ Un **Talent Engine** en Python, avec une interface Streamlit, qui suit cinq éta
 - Priorité **Haute / Moyenne / Basse** selon des seuils configurables
 - Vue dédiée aux profils à examiner en premier
 
+### 📄 Rapport PDF
+- Export du rapport d'évaluation d'un candidat
+
 ### 🗑️ Gestion des candidats
 - Suppression individuelle (avec confirmation)
 - Réinitialisation des évaluations
 - Réinitialisation complète de la base
+
+---
+
+## 📸 Aperçu
+
+### 📄 Import automatique d'un CV PDF
+
+Pré-remplissage du formulaire par extraction regex.
+
+![Import CV](captures/import_cv.png)
+
+### 💡 Évaluation avec auto-qualification
+
+Les scores sont pré-remplis à partir du profil du candidat.
+
+![Évaluation](captures/evaluation.png)
+
+### 🏆 Classement et priorisation
+
+Classement trié par score, avec identification des profils prioritaires.
+
+![Classement](captures/classement.png)
+
+### 📊 Rapport PDF
+
+Export du rapport.
+
+![Rapport PDF](captures/rapport_pdf.png)
 
 ---
 
@@ -127,6 +159,7 @@ talent_engine/
 ├── seed_evaluations.py   # Évaluations de démonstration
 ├── test_scoring.py       # Tests du scoring
 ├── test_cv_parser.py     # Tests de l'extraction CV (18 tests)
+├── captures/             # Captures d'écran pour le README
 ├── requirements.txt      # Dépendances Python
 ├── .gitignore            # Fichiers exclus du dépôt
 └── README.md             # Ce fichier
@@ -134,12 +167,12 @@ talent_engine/
 
 ### Stack
 
-| Composant | Technologie | Pourquoi |
-|---|---|---|
-| Interface | **Streamlit** | Prototypage rapide, UI propre, aucun front à écrire |
-| Base de données | **SQLite** | Zéro configuration, fichier unique, portable |
-| Extraction PDF | **pdfplumber** | Fiable sur les PDF texte, gratuit, sans OCR |
-| Tests | **pytest** | Standard de fait, sortie lisible |
+| Composant      | Technologie    | Pourquoi                                             |
+|----------------|----------------|------------------------------------------------------|
+| Interface      | **Streamlit**  | Prototypage rapide, UI propre, aucun front à écrire  |
+| Base de données| **SQLite**     | Zéro configuration, fichier unique, portable         |
+| Extraction PDF | **pdfplumber** | Fiable sur les PDF texte, gratuit, sans OCR          |
+| Tests          | **pytest**     | Standard de fait, sortie lisible                     |
 
 ---
 
@@ -149,13 +182,13 @@ talent_engine/
 
 C'est la décision la plus structurante du projet. J'ai volontairement écarté un LLM pour le cœur du scoring :
 
-| Critère | Système à règles | LLM |
-|---|---|---|
-| **Déterminisme** | ✅ Résultat reproductible à 100 % | ❌ Non déterministe |
-| **Coût** | ✅ Gratuit | ❌ API payante |
-| **Testabilité** | ✅ Tests unitaires simples | ❌ Difficile à tester |
-| **Explicabilité** | ✅ Ex. : « 30 % technique, seuil à 80 » | ❌ Boîte noire |
-| **Vie privée** | ✅ Traitement 100 % local | ❌ Données envoyées à un tiers |
+| Critère           | Système à règles                             | LLM                              |
+|-------------------|----------------------------------------------|----------------------------------|
+| **Déterminisme**  | ✅ Résultat reproductible à 100 %            | ❌ Non déterministe              |
+| **Coût**          | ✅ Gratuit                                   | ❌ API payante                   |
+| **Testabilité**   | ✅ Tests unitaires simples                   | ❌ Difficile à tester            |
+| **Explicabilité** | ✅ Ex. : « 30 % technique, seuil à 80 »      | ❌ Boîte noire                   |
+| **Vie privée**    | ✅ Traitement 100 % local                    | ❌ Données envoyées à un tiers   |
 
 ### 2. Un scoring externalisé dans `config.json`
 
@@ -210,13 +243,13 @@ L'application s'ouvre à l'adresse <http://localhost:8501>.
 
 `seed_data.py` remplit la base avec 5 candidats aux profils variés :
 
-| Nom | Profil | Expérience | Disponibilité |
-|---|---|---|---|
-| Alice Dupont | Backend Python / FastAPI | 3 ans | Immédiate |
-| Bob Traoré | Junior HTML / CSS / JS | 0 an | 3 mois |
-| Clarisse Mensah | Senior React / Node | 5 ans | 1 mois |
-| David Kouassi | Débutant Python | 0 an | 6 mois |
-| Eva Ndiaye | ML / TensorFlow | 4 ans | Immédiate |
+| Nom             | Profil                   | Expérience | Disponibilité |
+|-----------------|--------------------------|------------|---------------|
+| Alice Dupont    | Backend Python / FastAPI | 3 ans      | Immédiate     |
+| Bob Traoré      | Junior HTML / CSS / JS   | 0 an       | 3 mois        |
+| Clarisse Mensah | Senior React / Node      | 5 ans      | 1 mois        |
+| David Kouassi   | Débutant Python          | 0 an       | 6 mois        |
+| Eva Ndiaye      | ML / TensorFlow          | 4 ans      | Immédiate     |
 
 `seed_evaluations.py` ajoute des évaluations pré-remplies pour tester le classement immédiatement. Le système peut ainsi être démontré sans rien saisir à la main.
 
@@ -265,14 +298,14 @@ test_cv_parser.py::test_nom_ignore_lignes_avec_email PASSED
 
 Un système qui prétend n'en avoir aucune est un système que personne n'a testé sérieusement. Voici ce que le projet ne fait pas encore :
 
-| Limite | Impact | Piste de résolution |
-|---|---|---|
-| PDF scannés (images) | Aucun texte extrait | Ajouter de l'OCR (Tesseract) |
-| Mise en page complexe | Extraction parfois mélangée | Compléter par un LLM sémantique |
-| Nom extrait par heuristique | Faux positifs possibles | Détection par position et contexte |
-| Pas d'authentification | Un seul utilisateur | Ajouter login et rôles |
-| SQLite mono-fichier | Inadapté à 10 000+ candidats | Migrer vers PostgreSQL |
-| Pas de notifications | Le recruteur doit consulter l'app | Ajouter emails et alertes |
+| Limite                      | Impact                              | Piste de résolution                  |
+|-----------------------------|-------------------------------------|--------------------------------------|
+| PDF scannés (images)        | Aucun texte extrait                 | Ajouter de l'OCR (Tesseract)         |
+| Mise en page complexe       | Extraction parfois mélangée         | Compléter par un LLM sémantique      |
+| Nom extrait par heuristique | Faux positifs possibles             | Détection par position et contexte   |
+| Pas d'authentification      | Un seul utilisateur                 | Ajouter login et rôles               |
+| SQLite mono-fichier         | Inadapté à 10 000+ candidats        | Migrer vers PostgreSQL               |
+| Pas de notifications        | Le recruteur doit consulter l'app   | Ajouter emails et alertes            |
 
 ---
 
@@ -293,12 +326,12 @@ Un système qui prétend n'en avoir aucune est un système que personne n'a test
 
 Conformément au brief, voici comment l'IA a été utilisée.
 
-| Usage | Détail |
-|---|---|
-| Structuration | Aide à la définition de l'architecture (séparation scoring / parser / UI) |
-| Débogage | Résolution d'erreurs (`pkg_resources`, `numpy.int64` → SQLite, `session_state` Streamlit) |
-| Rédaction du README | Aide à la mise en forme et à la structuration |
-| Génération de code | Certaines fonctions utilitaires (extracteurs regex) ont été générées, puis relues, testées et ajustées |
+| Usage               | Détail                                                                                                         |
+|---------------------|----------------------------------------------------------------------------------------------------------------|
+| Structuration       | Aide à la définition de l'architecture (séparation scoring / parser / UI)                                      |
+| Débogage            | Résolution d'erreurs (`pkg_resources`, `numpy.int64` → SQLite, `session_state` Streamlit)                      |
+| Rédaction du README | Aide à la mise en forme et à la structuration                                                                  |
+| Génération de code  | Certaines fonctions utilitaires (extracteurs regex) ont été générées, puis relues, testées et ajustées         |
 
 ### Ma contribution personnelle
 
