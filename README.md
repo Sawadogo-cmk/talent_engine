@@ -4,6 +4,8 @@
 
 **Principe directeur : le système propose, l'humain décide.**
 
+🌐 **Démo en ligne** : [talentenginegit.streamlit.app](https://talentenginegit-jyp4kflqhcodzbzu8y3cnc.streamlit.app/)
+
 ---
 
 ## 📌 Sommaire
@@ -140,7 +142,7 @@ Classement trié par score, avec identification des profils prioritaires.
 
 ### 📊 Rapport PDF
 
-Export du rapport.
+Export du rapport d'évaluation d'un candidat.
 
 ![Rapport PDF](captures/rapport_pdf.png)
 
@@ -316,7 +318,7 @@ Un système qui prétend n'en avoir aucune est un système que personne n'a test
 - 📤 Export CSV / Excel du classement filtré
 - 🤖 Extraction par LLM (Mistral, GPT-4o-mini) en complément des regex, pour les PDF complexes
 - 🔔 Notifications email aux candidats prioritaires
-- ☁️ Déploiement (Streamlit Cloud, Railway, Render)
+- ☁️ Migration vers une base de données cloud (Supabase, PostgreSQL) pour la persistance
 - 🧮 Scoring adaptatif : ajustement des poids selon les retours des recruteurs
 - 🌍 Interface multilingue (FR / EN)
 
